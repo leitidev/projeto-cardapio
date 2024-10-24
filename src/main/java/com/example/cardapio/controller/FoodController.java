@@ -31,4 +31,27 @@ public class FoodController {
         return foodList;
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @DeleteMapping("/{id}")
+    public void deleteFood(@PathVariable Long id){
+        repository.deleteById(id);
+    }
+
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PutMapping("/{id}")
+    public FoodResponseDTO updateFood(@PathVariable Long id, @RequestBody FoodRequestDTO data) {
+        Food food = repository.findById(id).orElseThrow(() -> new RuntimeException("Food not found"));
+
+        food.setTitle(data.title());
+        food.setImage(data.image());
+        food.setPrice(data.price());
+
+        repository.save(food);
+
+        return new FoodResponseDTO(food);
+    }
+
+
+
+
 }
